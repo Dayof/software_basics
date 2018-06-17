@@ -23,8 +23,9 @@ section .text
 
 %macro fibonacci 1
 section .data
-  cond_stop: dq 1
-  base: dq 0
+  a: dq 0
+  b: dq 1
+  param_print: dq %1
 section .text
   ; %%rep 100
   ; %%if j > 65535
@@ -35,20 +36,21 @@ section .text
   ; %%assign i j
   ; %%assign j k
   ; %%endrep
-  %if %1 < cond_stop
-    print_fib %1,base
+  %if %1 < 1d
+    print_fib param_print,a
+  %elif %1 < 2d
+    print_fib param_print,b
   %endif
 %endmacro
 
 section .data
-  number: dq -1
   fmt:    db "Fibonacci(%ld)=%ld", 10, 0	; The printf format, "\n",'0'
 
 section .text
   global main
 
 main:
-  fibonacci number
+  fibonacci 0d
 
   mov	rax,0		; normal, no error, return value
   ret         ; return
