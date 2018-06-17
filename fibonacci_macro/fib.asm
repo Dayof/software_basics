@@ -9,7 +9,7 @@ extern printf
 
 ; Print output
 %macro print_fib 2
-__SECT__
+section .text
   push    rbp		; set up stack frame
   mov	rax,[%1]	; put "a" from store into register
   mov	rdi,fmt   ; format for printf
@@ -21,20 +21,34 @@ __SECT__
   pop	rbp       ; restore stack
 %endmacro
 
-%macro fibonacci 2
-  print_fib %1,%2
+%macro fibonacci 1
+section .data
+  cond_stop: dq 1
+  base: dq 0
+section .text
+  ; %%rep 100
+  ; %%if j > 65535
+  ; %%exitrep
+  ; %%endif
+  		; dw j
+  ; %%assign k j+i
+  ; %%assign i j
+  ; %%assign j k
+  ; %%endrep
+  %if %1 < cond_stop
+    print_fib %1,base
+  %endif
 %endmacro
 
 section .data
-  a: dq 5
-  b: dq 7
-  fmt: db "Fibonacci(%ld)=%ld", 10, 0	; The printf format, "\n",'0'
+  number: dq -1
+  fmt:    db "Fibonacci(%ld)=%ld", 10, 0	; The printf format, "\n",'0'
 
 section .text
   global main
 
 main:
-  print_fib a,b
+  fibonacci number
 
   mov	rax,0		; normal, no error, return value
   ret         ; return
