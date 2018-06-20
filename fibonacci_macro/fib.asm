@@ -4,20 +4,26 @@
 ; link: gcc fib.o -o fib
 ; run: ./fib
 ; output is: Integer number (Fibonacci(n)=i-number)
+;
+; Grupo 6
+; Dayanne Fernandes da Cunha 13/0107191
+; Yuri Castro do Amaral 14/0033718
+; Arthur Augusto Coutinho Bizzi 13/0102636
+; Heron T Fonseca 11/0121058
+; Marcus Vinícius da Silva Borges 13/0032891
+
 
 extern printf
 
 ; Print output
 %macro print_fib 2
 section .text
-  push    rbp		; set up stack frame
   mov	rax,[%1]	; put "a" from store into register
   mov	rdi,fmt   ; format for printf
   mov	rsi,[%1]  ; first parameter for printf
   mov	rdx,[%2]  ; second parameter for printf
   mov	rax,0     ; no xmm registers
   call printf		; Call C function
-  pop	rbp       ; restore stack
 %endmacro
 
 %macro fibonacci 1
@@ -26,10 +32,11 @@ section .data
   b_cond: dq 1  ; 64-bit variable a initialized to 1
   param_print: dq %1
 
-  section .bss 	; uninitialized space
+section .bss 	; uninitialized space
   a:	resq	1		; reserve a 64-bit word
   b:	resq	1		; reserve a 64-bit word
   c:	resq	1		; reserve a 64-bit word
+  
 section .text
   %if %1 < 1d
     print_fib param_print,a_cond
@@ -60,7 +67,7 @@ section .text
   global main
 
 main:
-  fibonacci 9d
+  fibonacci 32d
 
   mov	rax,0		; normal, no error, return value
   ret         ; return
